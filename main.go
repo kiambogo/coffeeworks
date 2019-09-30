@@ -5,6 +5,7 @@ import (
 	"log"
 	"fmt"
 	"github.com/joho/godotenv"
+	"github.com/gorilla/handlers"
 	"net/http"
 
 	"github.com/kiambogo/coffeeworks/clients"
@@ -22,7 +23,7 @@ func main() {
 
 	log.Printf("CoffeeWorks started in environment '%v'", Env)
 	log.Printf("Listening on %v", port)
-	http.ListenAndServe(fmt.Sprintf(":%v",port), r)
+	http.ListenAndServe(fmt.Sprintf(":%v",port), handlers.CORS()(r))
 }
 
 
