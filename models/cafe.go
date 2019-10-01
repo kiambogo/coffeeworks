@@ -12,4 +12,5 @@ type Place struct {
 
 func (p *Place) LoadFromResult(result maps.PlacesSearchResult) {
 	p.Name = result.Name
+	p.LatLng = result.Geometry.Location
 }
