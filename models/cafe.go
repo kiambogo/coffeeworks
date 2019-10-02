@@ -1,13 +1,12 @@
 package models
 
-import 
-(
+import (
 	"googlemaps.github.io/maps"
 )
 
 type Place struct {
-	Name string `json:"name"`
-	LatLng maps.LatLng
+	Name   string      `json:"name"`
+	LatLng maps.LatLng `json:"location"`
 }
 
 func (p *Place) LoadFromResult(result maps.PlacesSearchResult) {
