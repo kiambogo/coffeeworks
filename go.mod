@@ -9,10 +9,12 @@ require (
 	github.com/gobuffalo/mw-paramlogger v0.0.0-20190224201358-0d45762ab655
 	github.com/gobuffalo/packr/v2 v2.6.0
 	github.com/gobuffalo/suite v2.8.2+incompatible
+	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/google/uuid v1.1.1 // indirect
 	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.3
 	github.com/joho/godotenv v1.3.0
+	github.com/stretchr/testify v1.4.0
 	github.com/unrolled/secure v1.0.4
 	golang.org/x/text v0.3.2
 	golang.org/x/tools v0.0.0-20190929041059-e7abfedfabcf // indirect
