@@ -1,16 +1,16 @@
 package clients
 
-import
-(
+import (
 	"context"
 	"log"
+
 	"googlemaps.github.io/maps"
 
 	"github.com/kiambogo/coffeeworks/models"
 )
 
 type PlacesIface interface {
-	FindPlacesNearArea() ([]models.Place, error)
+	FindPlacesNearArea(latLng maps.LatLng) ([]models.Place, error)
 }
 
 func InitializePlacesClient(apiKey string) PlacesIface {
@@ -26,13 +26,14 @@ type PlacesClient struct {
 	*maps.Client
 }
 
-func (p *PlacesClient) FindPlacesNearArea() ([]models.Place, error) {
+// FindPlacesNearArea searches for places near a particular point
+func (p *PlacesClient) FindPlacesNearArea(latLng maps.LatLng) ([]models.Place, error) {
 	searchRequest := &maps.NearbySearchRequest{
 		Location: &maps.LatLng{
-			Lat: 49.282384,
-			Lng: -123.108002,
+			Lat: latLng.Lat,
+			Lng: latLng.Lng,
 		},
-		Radius: 100,
+		Radius:  100,
 		Keyword: "coffee",
 	}
 
@@ -50,15 +51,15 @@ func (p *PlacesClient) FindPlacesNearArea() ([]models.Place, error) {
 		places = append(places, *place)
 	}
 
-
 	return places, nil
 }
 
 // MockPlacesClient used for testing
-type MockPlacesClient struct {}
+type MockPlacesClient struct{}
 
-func (m *MockPlacesClient) FindPlacesNearArea() ([]models.Place, error) {
-	log.Println("Mock: Finding places")
+// FindPlacesNearArea is a mocked method, returning some dummy data
+func (m *MockPlacesClient) FindPlacesNearArea(latLng maps.LatLng) ([]models.Place, error) {
+	log.Printf("Mock: Finding places near %v", latLng)
 
 	places := []models.Place{
 		models.Place{Name: "Joe's Coffee"},
