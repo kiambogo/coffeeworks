@@ -13,6 +13,14 @@ type Cafe struct {
 }
 
 type Cafes []Cafe
+
+// LoadFromDetailsResult converts a Places API SearchResult into our Place model
+func (c *Cafe) LoadFromDetailsResult(result maps.PlaceDetailsResult) {
+	c.PlaceID = result.PlaceID
+	c.Name = result.Name
+	c.LatLng = result.Geometry.Location
+}
+
 // LoadFromSearchResults converts a Places API SearchResult into our Place model
 func (c *Cafes) LoadFromSearchResults(results []maps.PlacesSearchResult) {
 	for _, result := range results {

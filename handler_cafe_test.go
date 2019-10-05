@@ -31,7 +31,7 @@ func TestListCafesHandler(t *testing.T) {
 		req, _ := http.NewRequest("GET", ts.URL, nil)
 
 		rr := httptest.NewRecorder()
-		handler := http.HandlerFunc(GetCafes)
+		handler := http.HandlerFunc(ListCafes)
 		handler.ServeHTTP(rr, req)
 
 		if status := rr.Code; status != ts.ExpectedResponseCode {

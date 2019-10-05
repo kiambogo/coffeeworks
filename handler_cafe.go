@@ -6,12 +6,29 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/kiambogo/coffeeworks/support"
 	"googlemaps.github.io/maps"
 )
 
-// GetCafes queries for cafes around a certain point
-func GetCafes(w http.ResponseWriter, r *http.Request) {
+// GetCafe queries for a particular cafe by id
+func GetCafe(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cafeID, ok := vars["id"]
+	if !ok {
+		support.ReturnString(w, 400, "Cafe ID required")
+	}
+
+	cafe, err := PlacesClient.GetPlaceDetails(cafeID)
+	if err != nil {
+		support.PrintError(err)
+		support.ReturnString(w, 500, "Something went wrong, yo")
+		return
+	}
+
+	support.ReturnPrettyJSON(w, 200, cafe)
+}
+
 // ListCafes queries for cafes around a certain point
 func ListCafes(w http.ResponseWriter, r *http.Request) {
 	latLng, err := parseLatLng(r)

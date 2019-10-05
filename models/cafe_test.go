@@ -20,4 +20,13 @@ func TestCafeLoadFromSearchResult(t *testing.T) {
 	assert.Equal(t, (*cafes)[0].Name, results[0].Name)
 	assert.Equal(t, (*cafes)[0].LatLng, results[0].Geometry.Location)
 }
+
+func TestCafeLoadFromDetailsResult(t *testing.T) {
+	result := testsupport.ValidPlaceDetailsResult()
+	cafe := &Cafe{}
+	cafe.LoadFromDetailsResult(result)
+
+	assert.Equal(t, cafe.PlaceID, result.PlaceID)
+	assert.Equal(t, cafe.Name, result.Name)
+	assert.Equal(t, cafe.LatLng, result.Geometry.Location)
 }

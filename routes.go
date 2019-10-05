@@ -10,6 +10,7 @@ func BuildRoutes() *mux.Router {
 
 	apiRouter := router.PathPrefix("/api").Subrouter()
 	apiRouter.HandleFunc("/cafes", ListCafes).Methods("GET")
+	apiRouter.HandleFunc("/cafes/{id}", GetCafe).Methods("GET")
 
 	return router
 }

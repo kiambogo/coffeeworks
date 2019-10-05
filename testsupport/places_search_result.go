@@ -17,6 +17,12 @@ func ValidPlacesSearchResults() []maps.PlacesSearchResult {
 		},
 	}
 }
+
+// ValidPlaceDetailsResult returns a gmaps PlacesSearchResult for testing purposes
+func ValidPlaceDetailsResult() maps.PlaceDetailsResult {
+	return maps.PlaceDetailsResult{
+		PlaceID: RandomString(40),
+		Name:    "Bob Loblaw's Cafe",
 		Geometry: maps.AddressGeometry{
 			Location: maps.LatLng{
 				Lat: 49.281574,
