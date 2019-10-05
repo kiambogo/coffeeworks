@@ -8,12 +8,16 @@ import (
 	"github.com/kiambogo/coffeeworks/testsupport"
 )
 
-func TestCafeLoadFromResult(t *testing.T) {
-	result := testsupport.ValidPlacesSearchResult()
-	place := &Place{}
-	place.LoadFromResult(result)
+func TestCafeLoadFromSearchResult(t *testing.T) {
+	results := testsupport.ValidPlacesSearchResults()
+	cafes := &Cafes{}
+	cafes.LoadFromSearchResults(results)
 
-	assert.Equal(t, place.PlaceID, result.ID)
-	assert.Equal(t, place.Name, result.Name)
-	assert.Equal(t, place.LatLng, result.Geometry.Location)
+	assert.Equal(t, 1, len(results))
+	assert.Equal(t, 1, len(*cafes))
+
+	assert.Equal(t, (*cafes)[0].PlaceID, results[0].PlaceID)
+	assert.Equal(t, (*cafes)[0].Name, results[0].Name)
+	assert.Equal(t, (*cafes)[0].LatLng, results[0].Geometry.Location)
+}
 }

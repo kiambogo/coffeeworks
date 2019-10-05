@@ -2,9 +2,15 @@ package support
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/url"
 )
+
+// PrintError simply prints the error message to stdout
+func PrintError(err error) {
+	log.Printf("ERROR: %v", err.Error())
+}
 
 // ReturnString writes a string msg to the HTTP response
 func ReturnString(w http.ResponseWriter, statusCode int, msg string) error {

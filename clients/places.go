@@ -10,7 +10,7 @@ import (
 )
 
 type PlacesIface interface {
-	FindPlacesNearArea(latLng maps.LatLng) ([]models.Place, error)
+	FindPlacesNearArea(latLng maps.LatLng) (models.Cafes, error)
 }
 
 func InitializePlacesClient(apiKey string) PlacesIface {
@@ -27,7 +27,7 @@ type PlacesClient struct {
 }
 
 // FindPlacesNearArea searches for places near a particular point
-func (p *PlacesClient) FindPlacesNearArea(latLng maps.LatLng) ([]models.Place, error) {
+func (p *PlacesClient) FindPlacesNearArea(latLng maps.LatLng) (models.Cafes, error) {
 	searchRequest := &maps.NearbySearchRequest{
 		Location: &maps.LatLng{
 			Lat: latLng.Lat,
@@ -43,12 +43,11 @@ func (p *PlacesClient) FindPlacesNearArea(latLng maps.LatLng) ([]models.Place, e
 		return nil, err
 	}
 
-	places := []models.Place{}
-	for _, result := range resp.Results {
-		place := &models.Place{}
-		place.LoadFromResult(result)
+	cafes := &models.Cafes{}
+	cafes.LoadFromSearchResults(resp.Results)
 
-		places = append(places, *place)
+	return *cafes, nil
+}
 	}
 
 	return places, nil
@@ -58,12 +57,12 @@ func (p *PlacesClient) FindPlacesNearArea(latLng maps.LatLng) ([]models.Place, e
 type MockPlacesClient struct{}
 
 // FindPlacesNearArea is a mocked method, returning some dummy data
-func (m *MockPlacesClient) FindPlacesNearArea(latLng maps.LatLng) ([]models.Place, error) {
+func (m *MockPlacesClient) FindPlacesNearArea(latLng maps.LatLng) (models.Cafes, error) {
 	log.Printf("Mock: Finding places near %v", latLng)
 
-	places := []models.Place{
-		models.Place{Name: "Joe's Coffee"},
-		models.Place{Name: "Blenzzzz"},
+	places := models.Cafes{
+		models.Cafe{Name: "Joe's Coffee"},
+		models.Cafe{Name: "Blenzzzz"},
 	}
 	return places, nil
 }

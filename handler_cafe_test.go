@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestCafeHandlerGet(t *testing.T) {
+func TestListCafesHandler(t *testing.T) {
 	initPlacesClient()
 	type testScenario struct {
 		Name                 string
@@ -35,7 +35,7 @@ func TestCafeHandlerGet(t *testing.T) {
 		handler.ServeHTTP(rr, req)
 
 		if status := rr.Code; status != ts.ExpectedResponseCode {
-			t.Errorf("(Test %v) GetCafes returned code %v when %v was expectedhandler", ts.Name, status, ts.ExpectedResponseCode)
+			t.Errorf("(Test %v) ListCafes returned code %v when %v was expectedhandler", ts.Name, status, ts.ExpectedResponseCode)
 		}
 	}
 }

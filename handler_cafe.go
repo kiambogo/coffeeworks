@@ -12,6 +12,8 @@ import (
 
 // GetCafes queries for cafes around a certain point
 func GetCafes(w http.ResponseWriter, r *http.Request) {
+// ListCafes queries for cafes around a certain point
+func ListCafes(w http.ResponseWriter, r *http.Request) {
 	latLng, err := parseLatLng(r)
 	if err != nil {
 		support.ReturnString(w, 400, "Need numeric query params 'lat' and 'lng'")
@@ -20,6 +22,7 @@ func GetCafes(w http.ResponseWriter, r *http.Request) {
 
 	places, err := PlacesClient.FindPlacesNearArea(latLng)
 	if err != nil {
+		support.PrintError(err)
 		support.ReturnString(w, 500, "Something went wrong, yo")
 		return
 	}
