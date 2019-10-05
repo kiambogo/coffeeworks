@@ -4,6 +4,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gorilla/mux"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestListCafesHandler(t *testing.T) {
@@ -38,4 +41,21 @@ func TestListCafesHandler(t *testing.T) {
 			t.Errorf("(Test %v) ListCafes returned code %v when %v was expectedhandler", ts.Name, status, ts.ExpectedResponseCode)
 		}
 	}
+}
+
+func TestGetCafeHandler(t *testing.T) {
+	initPlacesClient()
+
+	req, _ := http.NewRequest("GET", "/api/cafes/12345", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "12345"})
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(GetCafe)
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != 200 {
+		t.Errorf("GetCafe returned code %v when 200 was expectedhandler", status)
+	}
+
+	assert.Contains(t, rr.Body.String(), "Joe's Coffee")
 }
