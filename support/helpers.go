@@ -2,6 +2,7 @@ package support
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -27,6 +28,17 @@ func PrettyPrintJSON(data interface{}) (string, error) {
 	}
 
 	return string(bytes), nil
+}
+
+// ReturnJSON will write encoded JSON onto the HTTP response
+func ReturnJSON(w http.ResponseWriter, statusCode int, data interface{}) error {
+	json, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+	w.WriteHeader(statusCode)
+	_, err = w.Write([]byte(json))
+	return err
 }
 
 // ReturnPrettyJSON will write encoded, prettified JSON onto the HTTP response
@@ -63,4 +75,10 @@ func GetQueryParam(r *http.Request, key string) []string {
 	}
 
 	return values[key]
+}
+
+// UnmarshalJSON takes in a request body and a pointer to a struct with which to unmarshal JSON from the body
+func UnmarshalJSON(body io.Reader, v interface{}) error {
+	decoder := json.NewDecoder(body)
+	return decoder.Decode(v)
 }

@@ -9,8 +9,13 @@ func BuildRoutes() *mux.Router {
 	router := mux.NewRouter()
 
 	apiRouter := router.PathPrefix("/api").Subrouter()
-	apiRouter.HandleFunc("/cafes", ListCafes).Methods("GET")
-	apiRouter.HandleFunc("/cafes/{id}", GetCafe).Methods("GET")
+
+	cafesRouter := apiRouter.PathPrefix("/cafes").Subrouter()
+	cafesRouter.HandleFunc("", ListCafes).Methods("GET")
+	cafesRouter.HandleFunc("/{id}", GetCafe).Methods("GET")
+
+	reviewsRouter := apiRouter.PathPrefix("/reviews").Subrouter()
+	reviewsRouter.HandleFunc("", CreateReview).Methods("POST")
 
 	return router
 }
