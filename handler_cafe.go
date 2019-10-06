@@ -37,7 +37,14 @@ func ListCafes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	places, err := PlacesClient.FindPlacesNearArea(latLng)
+	radiusStr := support.GetQueryParamDefault(r, "radius", "100")
+	radius, err := strconv.Atoi(radiusStr)
+	if err != nil {
+		support.ReturnString(w, 400, "Radius, when specified, must be of numeric type")
+		return
+	}
+
+	places, err := PlacesClient.FindPlacesNearArea(latLng, radius)
 	if err != nil {
 		support.PrintError(err)
 		support.ReturnString(w, 500, "Something went wrong, yo")

@@ -10,7 +10,7 @@ import (
 )
 
 type PlacesIface interface {
-	FindPlacesNearArea(latLng maps.LatLng) (models.Cafes, error)
+	FindPlacesNearArea(latLng maps.LatLng, radius int) (models.Cafes, error)
 	GetPlaceDetails(placeID string) (models.Cafe, error)
 }
 
@@ -28,13 +28,13 @@ type PlacesClient struct {
 }
 
 // FindPlacesNearArea searches for places near a particular point
-func (p *PlacesClient) FindPlacesNearArea(latLng maps.LatLng) (models.Cafes, error) {
+func (p *PlacesClient) FindPlacesNearArea(latLng maps.LatLng, radius int) (models.Cafes, error) {
 	searchRequest := &maps.NearbySearchRequest{
 		Location: &maps.LatLng{
 			Lat: latLng.Lat,
 			Lng: latLng.Lng,
 		},
-		Radius:  100,
+		Radius:  uint(radius),
 		Keyword: "coffee",
 	}
 
@@ -70,8 +70,8 @@ func (p *PlacesClient) GetPlaceDetails(placeID string) (models.Cafe, error) {
 type MockPlacesClient struct{}
 
 // FindPlacesNearArea is a mocked method, returning some dummy data
-func (m *MockPlacesClient) FindPlacesNearArea(latLng maps.LatLng) (models.Cafes, error) {
-	log.Printf("Mock: Finding places near %v", latLng)
+func (m *MockPlacesClient) FindPlacesNearArea(latLng maps.LatLng, radius int) (models.Cafes, error) {
+	log.Printf("Mock: Finding places near %v, radius %v", latLng, radius)
 
 	places := models.Cafes{
 		models.Cafe{Name: "Joe's Coffee"},

@@ -28,6 +28,11 @@ func TestListCafesHandler(t *testing.T) {
 			URL:                  "/api/cafes?lat=40.00&lng=-120.00",
 			ExpectedResponseCode: 200,
 		},
+		testScenario{
+			Name:                 "With lat and lng and radius",
+			URL:                  "/api/cafes?lat=40.00&lng=-120.00&radius=500",
+			ExpectedResponseCode: 200,
+		},
 	}
 
 	for _, ts := range testScenarios {

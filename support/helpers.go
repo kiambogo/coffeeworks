@@ -28,6 +28,21 @@ func ReturnPrettyJSON(w http.ResponseWriter, statusCode int, data interface{}) e
 }
 
 // GetQueryParam parses a request query params for a particular key
+func GetQueryParamDefault(r *http.Request, key string, fallback string) string {
+	values, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		return fallback
+	}
+
+	params, ok := values[key]
+	if !ok || len(params) == 0 {
+		return fallback
+	}
+
+	return params[0]
+}
+
+// GetQueryParam parses a request query params for a particular key
 func GetQueryParam(r *http.Request, key string) []string {
 	values, err := url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
