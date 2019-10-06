@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/gofrs/uuid"
+	"github.com/kiambogo/coffeeworks/support"
 	"googlemaps.github.io/maps"
 )
 
@@ -13,6 +14,11 @@ type Cafe struct {
 }
 
 type Cafes []Cafe
+
+func (c *Cafe) String() string {
+	str, _ := support.PrettyPrintJSON(c)
+	return str
+}
 
 // LoadFromDetailsResult converts a Places API SearchResult into our Place model
 func (c *Cafe) LoadFromDetailsResult(result maps.PlaceDetailsResult) {
