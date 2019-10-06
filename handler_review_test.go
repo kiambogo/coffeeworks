@@ -10,7 +10,14 @@ import (
 )
 
 func TestCreateReviewHandlerSuccess(t *testing.T) {
-	body := `{"place_id":"12345", "badges":{"wifi":true, "seating":true, "service":false}}`
+	body := `{ "place_id":"12345",
+               "badges": {"wifi":true, "seating":true, "service":false},
+               "wifi_speed": 0,
+               "wifi_restrictions": 1,
+               "beverage_selection": 2,
+               "beverage_quality": 3,
+               "noise_level": 4,
+               "food_options_level": 2 }`
 
 	req, _ := http.NewRequest("POST", "/api/reviews", strings.NewReader(body))
 
@@ -44,6 +51,16 @@ func TestCreateReviewHandlerFailure(t *testing.T) {
 			Body:                `{"place_id":"12345", "badges":{"puppers":true}}`,
 			ExpectedResponseMsg: `{"badges":["at least one valid badge is required per review. Acceptable badges: [ beverages, food, outlets, seating, service, wifi ]"]}`,
 		},
+		testScenario{
+			Name:                "Wifi speed rating < 1",
+			Body:                `{"place_id":"12345", "badges":{"wifi":true}, "wifi_speed":-1}`,
+			ExpectedResponseMsg: `{"wifi_speed":["wifi_speed, when specified, must be an integer between 0 and 4"]}`,
+		},
+		testScenario{
+			Name:                "Wifi speed rating > 4",
+			Body:                `{"place_id":"12345", "badges":{"wifi":true}, "wifi_speed":5}`,
+			ExpectedResponseMsg: `{"wifi_speed":["wifi_speed, when specified, must be an integer between 0 and 4"]}`,
+		},
 	}
 
 	for _, ts := range testScenarios {
@@ -53,6 +70,6 @@ func TestCreateReviewHandlerFailure(t *testing.T) {
 		handler := http.HandlerFunc(CreateReview)
 		handler.ServeHTTP(rr, req)
 
-		assert.Equal(t, ts.ExpectedResponseMsg, rr.Body.String())
+		assert.Equal(t, ts.ExpectedResponseMsg, rr.Body.String(), ts.Name)
 	}
 }
