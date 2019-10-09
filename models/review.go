@@ -9,14 +9,14 @@ import (
 )
 
 type Review struct {
-	PlaceID           string    `json:"place_id"`
+	PlaceID           string    `json:"placeID"`
 	Badges            []Badge   `json:"badges"`
-	WifiSpeed         nulls.Int `json:"wifi_speed"`
-	WifiRestrictions  nulls.Int `json:"wifi_restrictions"`
-	BeverageSelection nulls.Int `json:"beverage_selection"`
-	BeverageQuality   nulls.Int `json:"beverage_quality"`
-	NoiseLevel        nulls.Int `json:"noise_level"`
-	FoodOptions       nulls.Int `json:"food_options_level"`
+	WifiSpeed         nulls.Int `json:"wifiSpeed"`
+	WifiRestrictions  nulls.Int `json:"wifiRestrictions"`
+	BeverageSelection nulls.Int `json:"beverageSelection"`
+	BeverageQuality   nulls.Int `json:"beverageQuality"`
+	NoiseLevel        nulls.Int `json:"noiseLevel"`
+	FoodOptions       nulls.Int `json:"foodOptionsLevel"`
 }
 
 func (r *Review) String() string {
@@ -46,14 +46,14 @@ func (r *Review) LoadFromCreateForm(form CreateReviewForm) {
 }
 
 type CreateReviewForm struct {
-	PlaceID           string          `json:"place_id"`
+	PlaceID           string          `json:"placeID"`
 	Badges            map[string]bool `json:"badges"`
-	WifiSpeed         nulls.Int       `json:"wifi_speed"`
-	WifiRestrictions  nulls.Int       `json:"wifi_restrictions"`
-	BeverageSelection nulls.Int       `json:"beverage_selection"`
-	BeverageQuality   nulls.Int       `json:"beverage_quality"`
-	NoiseLevel        nulls.Int       `json:"noise_level"`
-	FoodOptions       nulls.Int       `json:"food_options_level"`
+	WifiSpeed         nulls.Int       `json:"wifiSpeed"`
+	WifiRestrictions  nulls.Int       `json:"wifiRestrictions"`
+	BeverageSelection nulls.Int       `json:"beverageSelection"`
+	BeverageQuality   nulls.Int       `json:"beverageQuality"`
+	NoiseLevel        nulls.Int       `json:"noiseLevel"`
+	FoodOptions       nulls.Int       `json:"foodOptionsLevel"`
 }
 
 // Validate checks to ensure that the form has the data it needs
@@ -61,7 +61,7 @@ func (f *CreateReviewForm) Validate() map[string][]string {
 	errors := make(map[string][]string)
 
 	if f.PlaceID == "" {
-		errors["place_id"] = []string{"place_id must be specified"}
+		errors["placeID"] = []string{"placeID must be specified"}
 	}
 
 	validBadges := make(map[string]bool)
@@ -77,13 +77,13 @@ func (f *CreateReviewForm) Validate() map[string][]string {
 		errors["badges"] = []string{fmt.Sprintf("at least one valid badge is required per review. Acceptable badges: [ %v ]", strings.Join(BadgeNames, ", "))}
 	}
 
-	validate04Rating(errors, f.NoiseLevel, "noise_level")
-	validate04Rating(errors, f.WifiRestrictions, "wifi_restrictions")
-	validate04Rating(errors, f.WifiSpeed, "wifi_speed")
-	validate04Rating(errors, f.BeverageQuality, "beverage_quality")
-	validate04Rating(errors, f.BeverageSelection, "beverage_selection")
+	validate04Rating(errors, f.NoiseLevel, "noiseLevel")
+	validate04Rating(errors, f.WifiRestrictions, "wifiRestrictions")
+	validate04Rating(errors, f.WifiSpeed, "wifiSpeed")
+	validate04Rating(errors, f.BeverageQuality, "beverageQuality")
+	validate04Rating(errors, f.BeverageSelection, "beverageSelection")
 
-	validate02Rating(errors, f.FoodOptions, "food_options_level")
+	validate02Rating(errors, f.FoodOptions, "foodOptionsLevel")
 
 	return errors
 }
