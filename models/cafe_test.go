@@ -1,16 +1,17 @@
-package models
+package models_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/kiambogo/coffeeworks/models"
 	"github.com/kiambogo/coffeeworks/testsupport"
 )
 
 func TestCafeLoadFromSearchResult(t *testing.T) {
 	results := testsupport.ValidPlacesSearchResults()
-	cafes := &Cafes{}
+	cafes := &models.Cafes{}
 	cafes.LoadFromSearchResults(results)
 
 	assert.Equal(t, 1, len(results))
@@ -23,7 +24,7 @@ func TestCafeLoadFromSearchResult(t *testing.T) {
 
 func TestCafeLoadFromDetailsResult(t *testing.T) {
 	result := testsupport.ValidPlaceDetailsResult()
-	cafe := &Cafe{}
+	cafe := &models.Cafe{}
 	cafe.LoadFromDetailsResult(result)
 
 	assert.Equal(t, cafe.PlaceID, result.PlaceID)

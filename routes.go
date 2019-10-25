@@ -16,6 +16,7 @@ func BuildRoutes() *mux.Router {
 
 	reviewsRouter := apiRouter.PathPrefix("/reviews").Subrouter()
 	reviewsRouter.HandleFunc("", CreateReview).Methods("POST")
+	reviewsRouter.HandleFunc("/{id}", GetReview).Methods("GET")
 
 	return router
 }

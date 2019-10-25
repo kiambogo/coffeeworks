@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/kiambogo/coffeeworks/models"
 	"github.com/kiambogo/coffeeworks/support"
 )
@@ -29,5 +30,26 @@ func CreateReview(w http.ResponseWriter, r *http.Request) {
 		support.LogError(err, "CreateReview - saving review to db")
 		return
 	}
+
+	// Asynchronously process the review
+	go ProcessReview(review)
+
 	support.ReturnPrettyJSON(w, 200, form)
+}
+
+// GetReview handles requests to retrieve a review by place ID
+func GetReview(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	placeID, ok := vars["id"]
+	if !ok {
+		support.ReturnString(w, 400, "Place ID required")
+	}
+
+	reviews := &models.Reviews{}
+	if err := DB.Where("place_id = ?", placeID).Find(&reviews).Error; err != nil {
+		support.LogError(err, "GetReview (%v)", placeID)
+		return
+	}
+
+	support.ReturnPrettyJSON(w, 200, reviews)
 }
