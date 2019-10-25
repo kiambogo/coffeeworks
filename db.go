@@ -37,5 +37,6 @@ func ensureSchema() {
 
 	DB.AutoMigrate(
 		&models.Review{},
+		&models.Score{},
 	)
 }

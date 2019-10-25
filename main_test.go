@@ -15,4 +15,5 @@ func setupTest() {
 	}
 
 	DB.Exec("TRUNCATE reviews")
+	DB.Exec("TRUNCATE scores")
 }
