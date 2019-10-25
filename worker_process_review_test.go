@@ -20,14 +20,9 @@ func TestProcessReview(t *testing.T) {
 	err := ProcessReview(&review)
 	assert.NoError(t, err)
 
-	// Ensure an updated score is made
-	count := 0
-	models.DB.Model(&models.Score{}).Where("place_id = ?", score.PlaceID).Count(&count)
-	assert.Equal(t, 2, count)
-
 	// Ensure new score is accurate
 	newScore := &models.Score{}
-	newScore.LoadLatest(score.PlaceID)
+	newScore.LoadLatest(score.PlaceID, models.DB)
 
 	assert.Equal(t, float32(3.487805), newScore.WifiSpeed)
 	assert.Equal(t, 41, newScore.WifiSpeedWeight)

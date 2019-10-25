@@ -30,7 +30,7 @@ func GetCafe(w http.ResponseWriter, r *http.Request) {
 
 	// Add the score for the cafe, if exists
 	score := &models.Score{}
-	if err := score.LoadLatest(cafe.PlaceID); err != nil {
+	if err := score.LoadLatest(cafe.PlaceID, models.DB); err != nil {
 		if !gorm.IsRecordNotFoundError(err) {
 			support.LogError(err, "GetCafe (%v) - retrieving score", cafeID)
 			support.ReturnString(w, 500, "Something went wrong, yo")

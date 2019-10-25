@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/gofrs/uuid"
+	"github.com/jinzhu/gorm"
 )
 
 type Score struct {
@@ -29,6 +30,6 @@ type Score struct {
 type Scores []Score
 
 // FindForPlaceID returns the score for the given place ID
-func (s *Score) LoadLatest(placeID string) error {
-	return DB.Where("place_id = ?", placeID).Order("created_at desc").Limit(1).First(s).Error
+func (s *Score) LoadLatest(placeID string, db *gorm.DB) error {
+	return db.Where("place_id = ?", placeID).Order("created_at desc").Limit(1).First(s).Error
 }

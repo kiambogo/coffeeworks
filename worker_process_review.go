@@ -9,11 +9,13 @@ import (
 
 // ProcessReview is used to update the score for a cafe based on a new review
 func ProcessReview(review *models.Review) error {
+	tx := models.DB.Begin()
 	// Pull latest score
 	score := &models.Score{}
-	err := score.LoadLatest(review.PlaceID)
+	err := score.LoadLatest(review.PlaceID, tx)
 	if err != nil {
 		if !gorm.IsRecordNotFoundError(err) {
+			tx.Rollback()
 			return support.LogError(err, "ProcessReview (%v) - retrieving score", review.ID.String())
 		}
 	}
@@ -29,11 +31,17 @@ func ProcessReview(review *models.Review) error {
 	newScore.NoiseLevel, newScore.NoiseLevelWeight = updateOptionalRating(score.NoiseLevel, review.NoiseLevel, score.NoiseLevelWeight)
 	newScore.FoodOptions, newScore.FoodOptionsWeight = updateOptionalRating(score.FoodOptions, review.FoodOptions, score.FoodOptionsWeight)
 
-	if err = models.DB.Create(newScore).Error; err != nil {
+	if err = tx.Create(newScore).Error; err != nil {
+		tx.Rollback()
 		return support.LogError(err, "ProcessReview (%v) - saving new score", review.ID.String())
 	}
 
-	return nil
+	if err = tx.Delete(score).Error; err != nil {
+		tx.Rollback()
+		return support.LogError(err, "ProcessReview (%v) - soft deleting old score", review.ID.String())
+	}
+
+	return tx.Commit().Error
 }
 
 func updateOptionalRating(rating float32, newRating nulls.Int, oldWeight int) (float32, int) {
