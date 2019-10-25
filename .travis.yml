@@ -14,7 +14,7 @@ notifications:
 
 before_script:
   - createuser -s coffeeworks
-  - psql -c 'create database coffeeworks_test;' -U coffeeworks
+  - psql -c 'create database coffeeworks_test;' -U coffeeworks -d postgres
 
 script:
   - go test -v -race ./...
