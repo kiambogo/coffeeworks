@@ -11,7 +11,7 @@ import (
 func ProcessReview(review *models.Review) error {
 	// Pull latest score
 	score := &models.Score{}
-	err := models.DB.Where("place_id = ?", review.PlaceID).Order("created_at desc").Limit(1).First(score).Error
+	err := score.LoadLatest(review.PlaceID)
 	if err != nil {
 		if !gorm.IsRecordNotFoundError(err) {
 			return support.LogError(err, "ProcessReview (%v) - retrieving score", review.ID.String())

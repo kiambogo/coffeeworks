@@ -6,11 +6,14 @@ import (
 	"testing"
 
 	"github.com/gorilla/mux"
+	"github.com/kiambogo/coffeeworks/models"
+	"github.com/kiambogo/coffeeworks/testsupport"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestListCafesHandler(t *testing.T) {
-	initPlacesClient()
+	setupTest()
+
 	type testScenario struct {
 		Name                 string
 		URL                  string
@@ -49,7 +52,7 @@ func TestListCafesHandler(t *testing.T) {
 }
 
 func TestGetCafeHandler(t *testing.T) {
-	initPlacesClient()
+	setupTest()
 
 	req, _ := http.NewRequest("GET", "/api/cafes/12345", nil)
 	req = mux.SetURLVars(req, map[string]string{"id": "12345"})
@@ -63,4 +66,26 @@ func TestGetCafeHandler(t *testing.T) {
 	}
 
 	assert.Contains(t, rr.Body.String(), "Joe's Coffee")
+	assert.Contains(t, rr.Body.String(), `"score": null`)
+}
+
+func TestGetCafeHandlerScore(t *testing.T) {
+	setupTest()
+
+	score := testsupport.ValidScore()
+	models.DB.Create(&score)
+
+	req, _ := http.NewRequest("GET", "/api/cafes/12345", nil)
+	req = mux.SetURLVars(req, map[string]string{"id": "12345"})
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(GetCafe)
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != 200 {
+		t.Errorf("GetCafe returned code %v when 200 was expectedhandler", status)
+	}
+
+	assert.Contains(t, rr.Body.String(), "Joe's Coffee")
+	assert.Contains(t, rr.Body.String(), `"wifiSpeed": 3.5`)
 }

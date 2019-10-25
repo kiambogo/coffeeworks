@@ -27,7 +27,7 @@ func TestProcessReview(t *testing.T) {
 
 	// Ensure new score is accurate
 	newScore := &models.Score{}
-	models.DB.Where("place_id = ?", score.PlaceID).Order("created_at desc").Limit(1).First(newScore)
+	newScore.LoadLatest(score.PlaceID)
 
 	assert.Equal(t, float32(3.487805), newScore.WifiSpeed)
 	assert.Equal(t, 41, newScore.WifiSpeedWeight)

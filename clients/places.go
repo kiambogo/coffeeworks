@@ -84,5 +84,8 @@ func (m *MockPlacesClient) FindPlacesNearArea(latLng maps.LatLng, radius int) (m
 func (p *MockPlacesClient) GetPlaceDetails(placeID string) (models.Cafe, error) {
 	log.Printf("Mock: Retreiving details for cafe %v", placeID)
 
-	return models.Cafe{Name: "Joe's Coffee"}, nil
+	return models.Cafe{
+		PlaceID: "sweet-bean-12345",
+		Name:    "Joe's Coffee",
+	}, nil
 }

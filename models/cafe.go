@@ -11,6 +11,7 @@ type Cafe struct {
 	PlaceID string      `json:"placeID"`
 	Name    string      `json:"name"`
 	LatLng  maps.LatLng `json:"location"`
+	Score   *Score      `json:"score"`
 }
 
 type Cafes []Cafe

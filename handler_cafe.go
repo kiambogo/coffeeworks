@@ -7,6 +7,8 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
+	"github.com/kiambogo/coffeeworks/models"
 	"github.com/kiambogo/coffeeworks/support"
 	"googlemaps.github.io/maps"
 )
@@ -24,6 +26,18 @@ func GetCafe(w http.ResponseWriter, r *http.Request) {
 		support.PrintError(err)
 		support.ReturnString(w, 500, "Something went wrong, yo")
 		return
+	}
+
+	// Add the score for the cafe, if exists
+	score := &models.Score{}
+	if err := score.LoadLatest(cafe.PlaceID); err != nil {
+		if !gorm.IsRecordNotFoundError(err) {
+			support.LogError(err, "GetCafe (%v) - retrieving score", cafeID)
+			support.ReturnString(w, 500, "Something went wrong, yo")
+			return
+		}
+	} else {
+		cafe.Score = score
 	}
 
 	support.ReturnPrettyJSON(w, 200, cafe)
