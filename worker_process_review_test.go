@@ -13,7 +13,7 @@ func TestProcessReview(t *testing.T) {
 
 	// Insert a preliminary score
 	score := testsupport.ValidScore()
-	DB.Create(&score)
+	models.DB.Create(&score)
 
 	review := testsupport.ValidReview()
 
@@ -22,12 +22,12 @@ func TestProcessReview(t *testing.T) {
 
 	// Ensure an updated score is made
 	count := 0
-	DB.Model(&models.Score{}).Where("place_id = ?", score.PlaceID).Count(&count)
+	models.DB.Model(&models.Score{}).Where("place_id = ?", score.PlaceID).Count(&count)
 	assert.Equal(t, 2, count)
 
 	// Ensure new score is accurate
 	newScore := &models.Score{}
-	DB.Where("place_id = ?", score.PlaceID).Order("created_at desc").Limit(1).First(newScore)
+	models.DB.Where("place_id = ?", score.PlaceID).Order("created_at desc").Limit(1).First(newScore)
 
 	assert.Equal(t, float32(3.487805), newScore.WifiSpeed)
 	assert.Equal(t, 41, newScore.WifiSpeedWeight)

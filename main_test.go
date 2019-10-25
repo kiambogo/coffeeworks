@@ -1,19 +1,14 @@
 package main
 
 import (
-	"github.com/jinzhu/gorm"
+	"github.com/kiambogo/coffeeworks/models"
 )
 
 func setupTest() {
-	if DB == nil {
-		DB, _ = gorm.Open(
-			"postgres",
-			"host=localhost port=5432 user=coffeeworks dbname=coffeeworks_test password=mypassword sslmode=disable",
-		)
-
-		ensureSchema()
+	if models.DB == nil {
+		models.InitializeDB("test")
 	}
 
-	DB.Exec("TRUNCATE reviews")
-	DB.Exec("TRUNCATE scores")
+	models.DB.Exec("TRUNCATE reviews")
+	models.DB.Exec("TRUNCATE scores")
 }

@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"fmt"
@@ -6,12 +6,11 @@ import (
 	"os"
 
 	"github.com/jinzhu/gorm"
-	"github.com/kiambogo/coffeeworks/models"
 )
 
 var DB *gorm.DB
 
-func InitializeDB() {
+func InitializeDB(env string) {
 	var hostname string
 	var err error
 	var ok bool
@@ -22,7 +21,7 @@ func InitializeDB() {
 
 	DB, err = gorm.Open(
 		"postgres",
-		fmt.Sprintf("host=%v port=5432 user=coffeeworks dbname=coffeeworks_%v password=mypassword sslmode=disable", hostname, Env),
+		fmt.Sprintf("host=%v port=5432 user=coffeeworks dbname=coffeeworks_%v password=mypassword sslmode=disable", hostname, env),
 	)
 
 	if err != nil {
@@ -36,7 +35,7 @@ func ensureSchema() {
 	DB.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`)
 
 	DB.AutoMigrate(
-		&models.Review{},
-		&models.Score{},
+		&Review{},
+		&Score{},
 	)
 }

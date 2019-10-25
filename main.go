@@ -11,6 +11,7 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/kiambogo/coffeeworks/clients"
+	"github.com/kiambogo/coffeeworks/models"
 )
 
 var Env Environment
@@ -23,8 +24,8 @@ func main() {
 	loadEnv()
 
 	// Setup database connection
-	InitializeDB()
-	defer DB.Close()
+	models.InitializeDB(string(Env))
+	defer models.DB.Close()
 
 	initPlacesClient()
 	r := BuildRoutes()

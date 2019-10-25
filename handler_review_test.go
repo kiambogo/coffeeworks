@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/kiambogo/coffeeworks/models"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -31,7 +32,7 @@ func TestCreateReviewHandlerSuccess(t *testing.T) {
 
 	// Ensure review saved to db
 	count := 0
-	DB.Table("reviews").Count(&count)
+	models.DB.Table("reviews").Count(&count)
 	assert.Equal(t, 1, count)
 }
 

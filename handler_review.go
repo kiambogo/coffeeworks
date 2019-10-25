@@ -26,7 +26,7 @@ func CreateReview(w http.ResponseWriter, r *http.Request) {
 	review := &models.Review{}
 	review.LoadFromCreateForm(*form)
 
-	if err := DB.Create(review).Error; err != nil {
+	if err := models.DB.Create(review).Error; err != nil {
 		support.LogError(err, "CreateReview - saving review to db")
 		return
 	}
@@ -46,7 +46,7 @@ func GetReview(w http.ResponseWriter, r *http.Request) {
 	}
 
 	reviews := &models.Reviews{}
-	if err := DB.Where("place_id = ?", placeID).Find(&reviews).Error; err != nil {
+	if err := models.DB.Where("place_id = ?", placeID).Find(&reviews).Error; err != nil {
 		support.LogError(err, "GetReview (%v)", placeID)
 		return
 	}

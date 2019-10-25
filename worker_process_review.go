@@ -11,7 +11,7 @@ import (
 func ProcessReview(review *models.Review) error {
 	// Pull latest score
 	score := &models.Score{}
-	err := DB.Where("place_id = ?", review.PlaceID).Order("created_at desc").Limit(1).First(score).Error
+	err := models.DB.Where("place_id = ?", review.PlaceID).Order("created_at desc").Limit(1).First(score).Error
 	if err != nil {
 		if !gorm.IsRecordNotFoundError(err) {
 			return support.LogError(err, "ProcessReview (%v) - retrieving score", review.ID.String())
@@ -29,7 +29,7 @@ func ProcessReview(review *models.Review) error {
 	newScore.NoiseLevel, newScore.NoiseLevelWeight = updateOptionalRating(score.NoiseLevel, review.NoiseLevel, score.NoiseLevelWeight)
 	newScore.FoodOptions, newScore.FoodOptionsWeight = updateOptionalRating(score.FoodOptions, review.FoodOptions, score.FoodOptionsWeight)
 
-	if err = DB.Create(newScore).Error; err != nil {
+	if err = models.DB.Create(newScore).Error; err != nil {
 		return support.LogError(err, "ProcessReview (%v) - saving new score", review.ID.String())
 	}
 
