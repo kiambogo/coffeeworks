@@ -25,5 +25,9 @@ func CreateReview(w http.ResponseWriter, r *http.Request) {
 	review := &models.Review{}
 	review.LoadFromCreateForm(*form)
 
+	if err := DB.Create(review).Error; err != nil {
+		support.LogError(err, "CreateReview - saving review to db")
+		return
+	}
 	support.ReturnPrettyJSON(w, 200, form)
 }

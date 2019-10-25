@@ -3,13 +3,19 @@ package models
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/gobuffalo/nulls"
+	"github.com/gofrs/uuid"
 	"github.com/kiambogo/coffeeworks/support"
 )
 
 type Review struct {
-	PlaceID           string    `json:"placeID"`
+	ID                uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key;"`
+	CreatedAt         time.Time `gorm:"index"`
+	UpdatedAt         time.Time `gorm:"index"`
+	DeletedAt         *time.Time
+	PlaceID           string    `json:"placeID" gorm:"index"`
 	Badges            []Badge   `json:"badges"`
 	WifiSpeed         nulls.Int `json:"wifiSpeed"`
 	WifiRestrictions  nulls.Int `json:"wifiRestrictions"`
@@ -18,6 +24,8 @@ type Review struct {
 	NoiseLevel        nulls.Int `json:"noiseLevel"`
 	FoodOptions       nulls.Int `json:"foodOptionsLevel"`
 }
+
+type Reviews []Review
 
 func (r *Review) String() string {
 	str, _ := support.PrettyPrintJSON(r)

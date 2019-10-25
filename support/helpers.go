@@ -2,6 +2,7 @@ package support
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -81,4 +82,11 @@ func GetQueryParam(r *http.Request, key string) []string {
 func UnmarshalJSON(body io.Reader, v interface{}) error {
 	decoder := json.NewDecoder(body)
 	return decoder.Decode(v)
+}
+
+// LogError just logs an error, nbd
+func LogError(err error, msg string, args ...string) error {
+	msg = fmt.Sprintf(msg, args)
+	log.Printf("ERROR: %v\nCAUSE: %v", msg, err.Error())
+	return err
 }

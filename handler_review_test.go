@@ -10,6 +10,8 @@ import (
 )
 
 func TestCreateReviewHandlerSuccess(t *testing.T) {
+	setupTest()
+
 	body := `{ "placeID":"12345",
                "badges": {"wifi":true, "seating":true, "service":false},
                "wifiSpeed": 0,
@@ -26,6 +28,11 @@ func TestCreateReviewHandlerSuccess(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 
 	assert.Equal(t, 200, rr.Code)
+
+	// Ensure review saved to db
+	count := 0
+	DB.Table("reviews").Count(&count)
+	assert.Equal(t, 1, count)
 }
 
 func TestCreateReviewHandlerFailure(t *testing.T) {

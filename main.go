@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/gorilla/handlers"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/joho/godotenv"
 
 	"github.com/kiambogo/coffeeworks/clients"
@@ -18,7 +19,13 @@ var PlacesClient clients.PlacesIface
 func main() {
 	port := 8080
 
+	// Load the environment
 	loadEnv()
+
+	// Setup database connection
+	InitializeDB()
+	defer DB.Close()
+
 	initPlacesClient()
 	r := BuildRoutes()
 
