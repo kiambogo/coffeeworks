@@ -1,5 +1,8 @@
 language: go
 
+services:
+  - postgresql
+
 go:
 - master
 
@@ -8,6 +11,10 @@ env:
 
 notifications:
   email: false
+
+before_script:
+  - createuser -s coffeeworks
+  - psql -c 'create database coffeeworks_test;' -U coffeeworks
 
 script:
   - go test -v -race ./...
